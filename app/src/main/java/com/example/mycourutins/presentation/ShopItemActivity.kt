@@ -20,26 +20,17 @@ import com.example.mycourutins.domain.ShopItem
 import com.google.android.material.textfield.TextInputLayout
 
 class ShopItemActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishListener {
-
-//    private lateinit var viewModel: ShopItemViewModel
-//
-//    private lateinit var tilName: TextInputLayout
-//    private lateinit var tilCount: TextInputLayout
-//    private lateinit var etName: EditText
-//    private lateinit var etCount: EditText
-//    private lateinit var buttonSave: Button
-//
     private var screenMode = MODE_ANON
     private var shopItemId = ShopItem.UNDEFINED_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        parseIntent()
         setContentView(R.layout.activity_shop_item)
         if(savedInstanceState == null){
             launchRightMode()
         }
-        parseIntent()
     }
 
     override fun onEditingFinish() {

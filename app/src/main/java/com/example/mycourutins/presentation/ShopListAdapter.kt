@@ -3,8 +3,12 @@ package com.example.mycourutins.presentation
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
 import com.example.mycourutins.R
+import com.example.mycourutins.databinding.ItemShopDisabledBinding
+import com.example.mycourutins.databinding.ItemShopEnabledBinding
 import com.example.mycourutins.domain.ShopItem
 
 class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHodler>(
@@ -26,26 +30,37 @@ class ShopListAdapter : ListAdapter<ShopItem, ShopItemViewHodler>(
             else -> throw RuntimeException("Unknown view type $viewType")
         }
 
-        val view = LayoutInflater.from(parent.context).inflate(
+        val binding = DataBindingUtil.inflate<ViewDataBinding>(
+            LayoutInflater.from(parent.context),
             layout,
             parent,
             false
         )
-        return ShopItemViewHodler(view)
+
+        return ShopItemViewHodler(binding)
     }
 
     override fun onBindViewHolder(
         holder: ShopItemViewHodler,
         position: Int
     ) {
+        val binding = holder.binding
         val currentItem = getItem(position)
-        holder.tvName.text = currentItem.name
-        holder.tvCount.text = currentItem.count.toString()
-        holder.view.setOnLongClickListener {
+        when (binding) {
+            is ItemShopDisabledBinding -> {
+                binding.shopItem = currentItem
+            }
+
+            is ItemShopEnabledBinding -> {
+                binding.shopItem = currentItem
+            }
+        }
+
+        binding.root.setOnLongClickListener {
             onShopItemLongClickListener?.invoke(currentItem)
             true
         }
-        holder.view.setOnClickListener {
+        binding.root.setOnClickListener {
             onShopItemClickListener?.invoke(currentItem)
         }
     }
